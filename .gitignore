@@ -1,0 +1,10 @@
+# Ignore environment variables
+.env
+
+# Node.js dependencies
+node_modules/
+
+# Optional: macOS/Windows/VSCode junk files
+.DS_Store
+Thumbs.db
+.vscode/

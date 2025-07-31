@@ -6,7 +6,7 @@ const global = {
 async function fetchAPIData(endpoint) {
     // Below is my api key, please don't steal it or else I'll find you and it'll not end good... It's free to get one on https://www.themoviedb.org/.
     const API_KEY = 'ccc6c673ce7bff9613e19f0bfe5727d4';
-    const API_URL = 'http://api.themoviedb.org/3/';
+    const API_URL = 'https://api.themoviedb.org/3/';
 
     const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
 

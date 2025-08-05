@@ -8,9 +8,14 @@ async function fetchAPIData(endpoint) {
     const API_KEY = 'ccc6c673ce7bff9613e19f0bfe5727d4';
     const API_URL = 'https://api.themoviedb.org/3/';
 
+    setSpinner('show');
+
     const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
 
     const data = await response.json();
+
+    setSpinner('hide');
+
     return data;
 }
 
@@ -68,6 +73,19 @@ function highlightActiveLink() {
     const navLinks = document.querySelectorAll('.nav-link');
     console.log(navLinks)
     navLinks.forEach(navLink => navLink.getAttribute('href') === global.currentPage && navLink.classList.add('active'));
+}
+
+function setSpinner(state) {
+    switch (state) {
+        case 'show':
+            document.querySelector('.spinner').classList.add('show')
+            break;
+        case 'hide':
+            document.querySelector('.spinner').classList.remove('show')
+            break;
+        default:
+            break;
+    }
 }
 
 function init() {

@@ -91,6 +91,7 @@ function setSpinner(state) {
 }
 
 function init() {
+    console.log(global.currentPage)
     highlightActiveLink();
     switch (global.currentPage) {
         case '/':

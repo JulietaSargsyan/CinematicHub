@@ -22,13 +22,13 @@ async function fetchAPIData(endpoint) {
 }
 
 // Single Movie Card
-function createMovieCard(movie) {
+function createMovieCard(movie, type) {
   const card = document.createElement('div');
   card.classList.add('card');
 
   // Link
   const link = document.createElement('a');
-  link.href = `movie-details.html?id=${movie.id}`;
+  link.href = type ==='movie' ? `movie-details.html?id=${movie.id}` : `tv-details.html?id=${movie.id}`;
 
   // Image
   const img = document.createElement('img');
@@ -64,10 +64,73 @@ function createMovieCard(movie) {
   return card;
 }
 
-async function displayPopularMoviesORShows(endpoint, elementID) {
+// Display popular movies/tv-shows
+async function displayPopularMoviesORShows(endpoint, elementID, type) {
     const { results } = await fetchAPIData(endpoint);
     const container = document.getElementById(elementID);
-    results.forEach((movie => container.appendChild(createMovieCard(movie))))
+    results.forEach((movie => container.appendChild(createMovieCard(movie, type))))
+}
+
+// Display movie/tvShow detail
+async function displayDetails(type) {
+    const id = window.location.search.split('=')[1];
+
+    const item = await fetchAPIData(`${type}/${id}`);
+    console.log(item)
+    const div = document.createElement('div');
+    div.innerHTML = `
+        <div class="details-top">
+          <div>
+            <img
+              src=${`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+              class="card-img-top"
+              alt=${item.title}
+            />
+          </div>
+          <div>
+            <h2>${item.title || item.name}</h2>
+            <p>
+              <i class="fas fa-star text-primary"></i>
+              ${item.vote_average.toFixed(1)} / 10
+            </p>
+            <p class="text-muted">Release Date: ${item.release_date || item.first_air_date}</p>
+            <p>${item.overview}</p>
+            <h5>Genres</h5>
+            <ul class="list-group">
+                ${item.genres.map((genre) =>  `<li>${genre.name}</li>`).join('')}
+            </ul>
+            <a href="${item.homepage}" target="_blank" class="btn">Visit Homepage</a>
+          </div>
+        </div>
+        <div class="details-bottom">
+          <h2>${type} Info</h2>
+          ${type === 'movie' ? 
+          `<ul>
+            <li><span class="text-secondary">Budget:</span> $${addCommas(item.budget)}</li>
+            <li><span class="text-secondary">Revenue:</span> $${addCommas(item.revenue)}</li>
+            <li><span class="text-secondary">Runtime:</span> ${item.runtime} minutes</li>
+            <li><span class="text-secondary">Status:</span> ${item.status}</li>
+          </ul>`
+          :
+          `<ul>
+            <li><span class="text-secondary">Number Of Episodes:</span> ${item.number_of_episodes}</li>
+            <li>
+              <span class="text-secondary">Last Episode To Air:</span> ${item.last_episode_to_air.name}
+            </li>
+            <li><span class="text-secondary">Status:</span> Released</li>
+          </ul>`
+          }
+          <h4>Production Companies</h4>
+          <div class="list-group">${item.production_companies.map((company) =>  `<span>${company.name}</span>`).join(', ')}</div>
+        </div>
+    `;
+
+   const detailsPage = document.getElementById(`${type}-details`);
+   console.log(detailsPage)
+   const bgImage = document.querySelector(`.${type}Background`);
+   bgImage.style.backgroundImage = `url(https://image.tmdb.org/t/p/w500${item.backdrop_path})`;
+   detailsPage.appendChild(div);
+
 }
 
 // Highlight active link
@@ -90,22 +153,26 @@ function setSpinner(state) {
     }
 }
 
+function addCommas(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function init() {
     console.log(global.currentPage)
     highlightActiveLink();
     switch (global.currentPage) {
         case '/':
         case '/index.html':
-            displayPopularMoviesORShows('movie/popular', 'popular-movies');
+            displayPopularMoviesORShows('movie/popular', 'popular-movies', 'movie');
             break;
         case '/shows.html':
-            displayPopularMoviesORShows('tv/popular', 'popular-shows');
+            displayPopularMoviesORShows('tv/popular', 'popular-shows', 'tv');
             break;
         case '/movie-details.html':
-            console.log('TV details')
+            displayDetails('movie');
             break;
         case '/tv-details.html':
-            console.log('tv details');
+            displayDetails('tv')
             break;
         case '/search.html':
             console.log('search');

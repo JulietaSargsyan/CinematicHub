@@ -247,11 +247,6 @@ section h2 {
 }
 
 /* Search */
-.search {
-  padding: 60px;
-  margin-bottom: 40px;
-}
-
 .search .container {
   display: flex;
   justify-content: center;
@@ -265,7 +260,9 @@ section h2 {
 
 .search .container form {
   width: 100%;
-  max-width: 600px;
+  /* max-width: 800px; */
+  display: flex;
+  align-items: center;
 }
 
 .search-radio label {

@@ -1,5 +1,7 @@
+const repoName = '/CinematicHub';
+
 const global = {
-    currentPage: window.location.pathname,
+    currentPage: window.location.pathname.replace(repoName, ''),
 }
 
 // Fetch data from TMDB API

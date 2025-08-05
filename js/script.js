@@ -62,9 +62,9 @@ function createMovieCard(movie) {
   return card;
 }
 
-async function displayPopularMovies() {
-    const { results } = await fetchAPIData('movie/popular');
-    const container = document.getElementById('popular-movies');
+async function displayPopularMoviesORShows(endpoint, elementID) {
+    const { results } = await fetchAPIData(endpoint);
+    const container = document.getElementById(elementID);
     results.forEach((movie => container.appendChild(createMovieCard(movie))))
 }
 
@@ -93,10 +93,10 @@ function init() {
     switch (global.currentPage) {
         case '/':
         case '/index.html':
-            displayPopularMovies();
+            displayPopularMoviesORShows('movie/popular', 'popular-movies');
             break;
         case '/shows.html':
-            console.log('Shows')
+            displayPopularMoviesORShows('tv/popular', 'popular-shows');
             break;
         case '/movie-details.html':
             console.log('TV details')

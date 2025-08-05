@@ -31,7 +31,7 @@ function createMovieCard(movie) {
   // Image
   const img = document.createElement('img');
   img.classList.add('card-img-top');
-  img.alt = movie.title;
+  img.alt = movie?.title || movie?.name;
   img.src = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : 'images/no-image.jpg';
@@ -45,14 +45,14 @@ function createMovieCard(movie) {
 
   const title = document.createElement('h5');
   title.classList.add('card-title');
-  title.textContent = movie.title;
+  title.textContent = movie?.title || movie?.name;
 
   const release = document.createElement('p');
   release.classList.add('card-text');
 
   const small = document.createElement('small');
   small.classList.add('text-muted');
-  small.textContent = `Release: ${movie.release_date || 'Unknown'}`;
+  small.textContent = `Release: ${movie.release_date || movie.first_air_date || 'Unknown'}`;
 
   release.appendChild(small);
   cardBody.appendChild(title);
